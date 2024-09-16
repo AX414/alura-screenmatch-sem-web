@@ -15,8 +15,7 @@ public class ConsumoAPI {
                 .build();
         HttpResponse<String> response = null;
         try {
-            response = client
-                    .send(request, HttpResponse.BodyHandlers.ofString());
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

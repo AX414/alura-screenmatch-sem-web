@@ -9,4 +9,28 @@ public record DadosSerie(@JsonAlias("Title") String titulo,
                          @JsonAlias("totalSeasons") Integer totalTemporadas,
                          @JsonAlias("imdbRating") String avaliacao,
                          @JsonProperty("imdbVotes") String votos) {
+
+    public DadosSerie {
+        System.out.println("\n| Série: " + titulo + "| Temporadas: " + totalTemporadas + "|");
+    }
+
+    @Override
+    public String titulo() {
+        return titulo;
+    }
+
+    @Override
+    public Integer totalTemporadas() {
+        return totalTemporadas;
+    }
+
+    @Override
+    public String avaliacao() {
+        return avaliacao;
+    }
+
+    @Override
+    public String votos() {
+        return votos;
+    }
 }
