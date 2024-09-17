@@ -158,6 +158,11 @@ public class Main {
             if(episodioBuscado.isEmpty()){
                 System.out.println("\nEpisódio não encontrado.");
             }
+
+            Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+                    .collect(Collectors.groupingBy(Episodio::getTemporada,
+                            Collectors.averagingDouble(Episodio::getAvaliacao)));
+            System.out.println(avaliacoesPorTemporada);
         }
     }
 }
