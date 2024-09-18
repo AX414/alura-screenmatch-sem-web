@@ -6,14 +6,13 @@ import br.com.alura.screenmatch.model.DadosTemporada;
 import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
-import ch.qos.logback.core.encoder.JsonEscapeUtil;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Main {
+public class MainAntigo {
 
     private Scanner ler = new Scanner(System.in);
     private ConsumoAPI consumoAPI = new ConsumoAPI();
@@ -116,9 +115,9 @@ public class Main {
                     //.peek(e-> System.out.println("\nOrdenação: "+e))
                     .limit(10)
                     //.peek(e-> System.out.println("\nLimite: "+e))
-                    .map(e-> e.titulo().toUpperCase())
+                    .map(e -> e.titulo().toUpperCase())
                     //.peek(e-> System.out.println("\nMapeamento: "+e))
-                    .forEach(e-> System.out.println("* "+e));
+                    .forEach(e -> System.out.println("* " + e));
 
             System.out.println("\nApresentando episódios e temporadas por meio de um construtor de episódios da classe Episódio:");
             List<Episodio> episodios = temporadas.stream()
@@ -132,7 +131,7 @@ public class Main {
             var ano = ler.nextInt();
             ler.nextLine();
 
-            System.out.println("\nApresentando episódios a partir do ano de "+ano+ ": ");
+            System.out.println("\nApresentando episódios a partir do ano de " + ano + ": ");
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyy");
             LocalDate dataBusca = LocalDate.of(ano, 1, 1);
 
@@ -155,14 +154,32 @@ public class Main {
 
             //Procura se existe
             episodioBuscado.ifPresent(episodio -> System.out.println("\nEpisódio encontrado, ele pertence à temporada: " + episodio.getTemporada()));
-            if(episodioBuscado.isEmpty()){
+            if (episodioBuscado.isEmpty()) {
                 System.out.println("\nEpisódio não encontrado.");
             }
 
-            Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+            //Apresenta a média de avaliação por temporada
+            System.out.println("\nApresenta média de avaliação por temporada: ");
+            Map<Integer, Double> avaliacaoPorTemporada = episodios.stream()
+                    .filter(e -> e.getAvaliacao() != null && e.getAvaliacao() > 0.0)
                     .collect(Collectors.groupingBy(Episodio::getTemporada,
                             Collectors.averagingDouble(Episodio::getAvaliacao)));
-            System.out.println(avaliacoesPorTemporada);
+            System.out.println("* "+avaliacaoPorTemporada);
+
+            //Apresenta estatísticas
+            System.out.println("\nApresenta Estatísticas do Double Summary Statistics: ");
+            DoubleSummaryStatistics est = episodios.stream()
+                    .filter(e -> e.getAvaliacao() != null && e.getAvaliacao() > 0.0)
+                    .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+            System.out.println("* "+est);
+
+            //Não é necessário somar todas as avaliações
+            //imprimimos apenas o necessário
+            System.out.println("\n\nApresentando as estatísticas que eu quero:"
+                    + "\n* Média: " + est.getAverage()
+                    + "\n* Menor Avaliação: " + est.getMin()
+                    + "\n* Melhor Avaliação: " + est.getMax()
+                    + "\n* Quantidade de episódios avaliados: " + est.getCount());
         }
     }
 }

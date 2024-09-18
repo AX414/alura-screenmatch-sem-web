@@ -49,48 +49,54 @@ public class MainNovo {
                         break;
                     case 2:
                         //Não roda se a lista de temporadas não estiver populada
-                        if(temporadas.isEmpty())
+                        if (temporadas.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             apresentandoTodosOsTitulos(temporadas);
                         break;
                     case 3:
                         //Não roda se a lista de temporadas não estiver populada
-                        if(temporadas.isEmpty())
+                        if (temporadas.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             todosEpisodiosDeTodasTemporadas = utilizandoStreamsELambdas(temporadas);
                         break;
                     case 4:
                         //Não roda se não tiver a lista de todos os eps e todas as temporadas populadas
-                        if(temporadas.isEmpty()||todosEpisodiosDeTodasTemporadas.isEmpty())
+                        if (temporadas.isEmpty() || todosEpisodiosDeTodasTemporadas.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             apresentandoDezMaisAvaliados(todosEpisodiosDeTodasTemporadas);
                         break;
                     case 5:
-                        if(temporadas.isEmpty())
+                        if (temporadas.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             episodios = apresentandoEpisodiosETemporadasPorConstrutor(temporadas);
                         break;
                     case 6:
-                        if(temporadas.isEmpty()||episodios.isEmpty())
+                        if (temporadas.isEmpty() || episodios.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             apresentarEpisodiosAPartirDeUmAno(episodios);
                         break;
                     case 7:
-                        if(temporadas.isEmpty()||episodios.isEmpty())
+                        if (temporadas.isEmpty() || episodios.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             apresentarTemporadaPorEpisodio(episodios);
                         break;
                     case 8:
-                        if(temporadas.isEmpty()||episodios.isEmpty())
+                        if (temporadas.isEmpty() || episodios.isEmpty())
                             System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
                         else
                             apresentarAvaliacoesPorTemporada(episodios);
+                        break;
+                    case 9:
+                        if (temporadas.isEmpty() || episodios.isEmpty())
+                            System.out.println("\nNão é possível acessar essa opção ainda (acesse as opções anteriores primeiro).");
+                        else
+                            apresentarEstatisticas(episodios);
                         break;
                     case 0:
                         System.out.println("\nEncerrando o programa.");
@@ -140,7 +146,8 @@ public class MainNovo {
         System.out.println("5 - Apresentar episódios e temporadas por um construtor personalizado.");
         System.out.println("6 - Apresentar episódios a partir de um ano.");
         System.out.println("7 - Apresentar temporada por um episódio.");
-        System.out.println("8 - Apresentar avaliações por temporada.");
+        System.out.println("8 - Apresentar média de avaliações por temporada.");
+        System.out.println("9 - Apresentar estatísticas");
         System.out.println("0 - Encerrar Programa.");
     }
 
@@ -270,10 +277,30 @@ public class MainNovo {
 
     //8
     public void apresentarAvaliacoesPorTemporada(List<Episodio> episodios) {
-        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+        //Apresenta a média de avaliação por temporada
+        Map<Integer, Double> avaliacaoPorTemporada = episodios.stream()
+                .filter(e -> e.getAvaliacao() != null && e.getAvaliacao() > 0.0)
                 .collect(Collectors.groupingBy(Episodio::getTemporada,
                         Collectors.averagingDouble(Episodio::getAvaliacao)));
-        System.out.println(avaliacoesPorTemporada);
+        System.out.println("* " + avaliacaoPorTemporada);
+    }
+
+    //9
+    public void apresentarEstatisticas(List<Episodio> episodios) {
+        //Apresenta estatísticas
+        System.out.println("\nApresenta Estatísticas do Double Summary Statistics: ");
+        DoubleSummaryStatistics est = episodios.stream()
+                .filter(e -> e.getAvaliacao() != null && e.getAvaliacao() > 0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+        System.out.println("* " + est);
+
+        //Não é necessário somar todas as avaliações
+        //imprimimos apenas o necessário
+        System.out.println("\n\nApresentando as estatísticas que eu quero:"
+                + "\n* Média: " + est.getAverage()
+                + "\n* Menor Avaliação: " + est.getMin()
+                + "\n* Melhor Avaliação: " + est.getMax()
+                + "\n* Quantidade de episódios avaliados: " + est.getCount());
     }
 
 }

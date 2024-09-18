@@ -1,17 +1,10 @@
 package br.com.alura.screenmatch;
 
-import br.com.alura.screenmatch.main.Main;
-import br.com.alura.screenmatch.model.DadosEpisodios;
-import br.com.alura.screenmatch.model.DadosSerie;
-import br.com.alura.screenmatch.model.DadosTemporada;
-import br.com.alura.screenmatch.service.ConsumoAPI;
-import br.com.alura.screenmatch.service.ConverteDados;
+import br.com.alura.screenmatch.main.MainAntigo;
+import br.com.alura.screenmatch.main.MainNovo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -22,8 +15,10 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Main main = new Main();
-		//main.apredendoSobreStreams();
+        //O MainAntigo é a classe que foi utilizada para estudo
+        //ela é mais desorganizada e nem utiliza funções para separar o código
+        //MainAntigo main = new MainAntigo();
+        MainNovo main = new MainNovo();
         main.consultarAPI();
     }
 }
