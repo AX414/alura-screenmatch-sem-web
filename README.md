@@ -1,2 +1,2 @@
 # alura-screenmatch-sem-web
-Este repositório foi cirado durante meus estudos sobre Java Web pela Alura.
+Este repositório foi criado durante meus estudos sobre Java Web pela Alura.
